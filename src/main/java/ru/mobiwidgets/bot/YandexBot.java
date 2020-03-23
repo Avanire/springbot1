@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import ru.mobiwidgets.bot.competitors.Competitors;
 import ru.mobiwidgets.bot.keywords.Keywords;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -119,44 +120,20 @@ public class YandexBot implements Bot {
     @Override
     public void actionOnOurSite() throws InterruptedException, IOException {
         try {
+            Robot robot = new Robot();
             WebElement element = driver.findElement(By.xpath("//h2[text()='Все категории']"));
+            robot.mouseMove(element.getLocation().x, element.getLocation().y);
             Actions actions = new Actions(driver);
             actions.moveToElement(element).click().build().perform();
             Thread.sleep(3000);
             WebElement element1 = driver.findElement(By.xpath("//a//span[text()='Для собак']"));
+            robot.mouseMove(element1.getLocation().x, element1.getLocation().y);
             actions.moveToElement(element1).click().build().perform();
             Thread.sleep(3000);
-            List<WebElement> list = driver.findElements(By.xpath("//div[@id='content']//a"));
-            int min = 2000;
-            int max = 10000;
-            int diff = max - min;
-            Random rnd = new Random();
-            int i = rnd.nextInt(diff + 1);
-            actions.moveToElement(list.get(rnd.nextInt(list.size() - 1))).build().perform();
-            Thread.sleep(i);
-            actions.moveToElement(list.get(rnd.nextInt(list.size() - 1))).build().perform();
-            Thread.sleep(i);
-            actions.moveToElement(list.get(rnd.nextInt(list.size() - 1))).build().perform();
-            Thread.sleep(i);
-            actions.moveToElement(list.get(rnd.nextInt(list.size() - 1))).build().perform();
-            Thread.sleep(i);
-            actions.moveToElement(list.get(rnd.nextInt(list.size() - 1))).build().perform();
-            Thread.sleep(i);
-            actions.moveToElement(list.get(rnd.nextInt(list.size() - 1))).build().perform();
-            Thread.sleep(i);
-            actions.moveToElement(list.get(rnd.nextInt(list.size() - 1))).build().perform();
-            Thread.sleep(i);
-            actions.moveToElement(list.get(rnd.nextInt(list.size() - 1))).build().perform();
-            Thread.sleep(i);
-            actions.moveToElement(list.get(rnd.nextInt(list.size() - 1))).build().perform();
-            Thread.sleep(i);
-            actions.moveToElement(list.get(rnd.nextInt(list.size() - 1))).build().perform();
-            Thread.sleep(i);
-            actions.moveToElement(list.get(rnd.nextInt(list.size() - 1))).build().perform();
-            Thread.sleep(i);
-            actions.moveToElement(list.get(rnd.nextInt(list.size() - 1))).build().perform();
-            Thread.sleep(i);
-            actions.moveToElement(list.get(rnd.nextInt(list.size() - 1))).click().build().perform();
+            List<WebElement> list = driver.findElements(By.xpath("//div[@class='product-thumb']//div//a"));
+            for(int i = 0; i < 10; i++){
+                moveToElement(list);
+            }
             Thread.sleep(100000);
             WebElement element3 = driver.findElement(By.xpath("//jdiv[@class='text_eD']"));
             actions.moveToElement(element3).click().build().perform();
@@ -173,6 +150,22 @@ public class YandexBot implements Bot {
             System.out.println("Ошибка на последнем шаге");
             close();
         }
+    }
+
+    @Override
+    public void moveToElement(List<WebElement> list) throws InterruptedException, AWTException {
+        Actions actions = new Actions(driver);
+        Robot robot = new Robot();
+        int min = 2000;
+        int max = 10000;
+        int diff = max - min;
+        Random rnd = new Random();
+        int j = rnd.nextInt(list.size() - 1);
+        robot.mouseWheel((int) (j / 1.3));
+        robot.mouseMove(list.get(j).getLocation().x, list.get(j).getLocation().y);
+        actions.moveToElement(list.get(j)).build().perform();
+        int i = rnd.nextInt(diff + 1);
+        Thread.sleep(i);
     }
 
     @Override
